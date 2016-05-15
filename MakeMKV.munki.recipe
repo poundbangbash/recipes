@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>Downloads the latest version of the MakeMKV application and imports into Munki.</string>
+	<key>Identifier</key>
+	<string>com.home.munki.MakeMKV</string>
+	<key>Input</key>
+	<dict>
+		<key>NAME</key>
+		<string>MakeMKV</string>
+		<key>repo_subdirectory</key>
+		<string>apps/makemkv</string>
+		<key>pkginfo</key>
+		<dict>
+			<key>catalogs</key>
+			<array>
+				<string>testing-makemkv-makemkv</string>
+			</array>
+			<key>name</key>
+			<string>%NAME%</string>
+			<key>display_name</key>
+			<string>%NAME%</string>
+			<key>description</key>
+			<string>MakeMKV is your one-click solution to convert video that you own into free and patents-unencumbered format that can be played everywhere.</string>
+			<key>minimum_os_version</key>
+			<string>10.6</string>
+		</dict>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>0.5.1</string>
+	<key>ParentRecipe</key>
+	<string>com.home.download.MakeMKV</string>
+	<key>Process</key>
+	<array>
+        <dict>
+            <key>Processor</key>
+            <string>FileFinder</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pattern</key>
+                <string>%RECIPE_CACHE_DIR%/downloads/makemkv*.dmg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>Versioner</string>
+            <key>Arguments</key>
+            <dict>
+                <key>input_plist_path</key>
+                <string>%found_filename%/%NAME%.app/Contents/Info.plist</string>
+            </dict>
+        </dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiPkginfoMerger</string>
+			<key>Arguments</key>
+			<dict>
+				<key>additional_pkginfo</key>
+				<dict>
+					<key>version</key>
+					<string>%version%</string>
+				</dict>
+			</dict>
+		</dict>
+		<dict>
+			<key>Processor</key>
+			<string>MunkiImporter</string>
+			<key>Arguments</key>
+			<dict>
+				<key>pkg_path</key>
+				<string>%pathname%</string>
+				<key>munkiimport_appname</key>
+				<string>%NAME%.app</string>
+				<key>version_comparison_key</key>
+				<string>CFBundleShortVersionString</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
